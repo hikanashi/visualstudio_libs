@@ -10,6 +10,7 @@
 # This definition stops the following lines choking if HOME isn't
 # defined.
 HOME			= .
+openssl_conf = openssl_init
 
 # Extra OBJECT IDENTIFIER info:
 #oid_file		= $ENV::HOME/.oid
@@ -348,3 +349,18 @@ ess_cert_id_chain	= no	# Must the ESS cert id chain be included?
 				# (optional, default: no)
 ess_cert_id_alg		= sha1	# algorithm to compute certificate
 				# identifier (optional, default: sha1)
+
+
+
+
+[openssl_init]
+engines=engine_section
+
+[engine_section]
+pkcs11 = pkcs11_section
+
+[pkcs11_section]
+engine_id = pkcs11
+dynamic_path = C:\\opt\\local\\lib\\pkcs11.dll
+MODULE_PATH = opensc-pkcs11.so
+init = 0
