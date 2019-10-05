@@ -1,0 +1,13 @@
+prefix=C:/opt/local
+exec_prefix=C:/opt/local
+libdir=C:/opt/local/lib
+sharedlibdir=C:/opt/local/lib
+includedir=C:/opt/local/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.11
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

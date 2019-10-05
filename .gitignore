@@ -30,5 +30,6 @@
 *.exe
 *.out
 *.app
-/libs/*.zip
-/libs/*.gz
+*.zip
+*.gz
+.build
