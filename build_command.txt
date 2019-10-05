@@ -52,3 +52,6 @@ cmake --build . --config Debug --target INSTALL
 cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_EXE_LINKER_FLAGS="CRYPT32.LIB /MTd" -DCMAKE_BUILD_TYPE=Debug -DgRPC_MSVC_STATIC_RUNTIME=ON -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_SSL_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_GFLAGS_PROVIDER=package -DgRPC_BENCHMARK_PROVIDER=package -DgRPC_BUILD_CSHARP_EXT=OFF -DCMAKE_INSTALL_PREFIX=C:\opt\local ..
 cmake --build . --config Debug --target INSTALL
 
+Å°libuuid
+cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="C:\opt\local" ..
+cmake --build . --config Debug

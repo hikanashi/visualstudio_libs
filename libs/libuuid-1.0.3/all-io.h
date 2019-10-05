@@ -10,11 +10,15 @@
 #define UTIL_LINUX_ALL_IO_H
 
 #include <string.h>
+#ifndef _WIN32
 #include <unistd.h>
+#else
+typedef int ssize_t;
+#endif
 #include <errno.h>
 
 #include "c.h"
-
+#ifndef _WIN32
 static inline int write_all(int fd, const void *buf, size_t count)
 {
 	while (count) {
@@ -77,6 +81,6 @@ static inline ssize_t read_all(int fd, char *buf, size_t count)
 	}
 	return c;
 }
-
+#endif
 
 #endif /* UTIL_LINUX_ALL_IO_H */

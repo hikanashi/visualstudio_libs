@@ -7,13 +7,53 @@
  * GNU Lesser General Public License.
  */
 #include <stdio.h>
+#ifndef _WIN32
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef _WIN32
 #include <sys/time.h>
-
 #include <sys/syscall.h>
+#else
+#include <process.h>
+#define getpid _getpid
+#define getuid()   (100)
+typedef int ssize_t;
+
+#include <time.h>
+#include <windows.h>
+#include <stdint.h>
+// MSVC defines this in winsock2.h!?
+//typedef struct timeval {
+//    long tv_sec;
+//    long tv_usec;
+//} timeval;
+ 
+static 
+int gettimeofday(struct timeval * tp, struct timezone * tzp)
+{
+    // Note: some broken versions only have 8 trailing zero's, the correct epoch has 9 trailing zero's
+    // This magic number is the number of 100 nanosecond intervals since January 1, 1601 (UTC)
+    // until 00:00:00 January 1, 1970 
+    static const uint64_t EPOCH = ((uint64_t) 116444736000000000ULL);
+
+    SYSTEMTIME  system_time;
+    FILETIME    file_time;
+    uint64_t    time;
+
+    GetSystemTime( &system_time );
+    SystemTimeToFileTime( &system_time, &file_time );
+    time =  ((uint64_t)file_time.dwLowDateTime )      ;
+    time += ((uint64_t)file_time.dwHighDateTime) << 32;
+
+    tp->tv_sec  = (long) ((time - EPOCH) / 10000000L);
+    tp->tv_usec = (long) (system_time.wMilliseconds * 1000);
+    return 0;
+}
+#endif
+
 
 #include "randutils.h"
 
@@ -34,6 +74,7 @@ int random_get_fd(void)
 	struct timeval	tv;
 
 	gettimeofday(&tv, 0);
+#ifndef _WIN32
 	fd = open("/dev/urandom", O_RDONLY);
 	if (fd == -1)
 		fd = open("/dev/random", O_RDONLY | O_NONBLOCK);
@@ -42,6 +83,9 @@ int random_get_fd(void)
 		if (i >= 0)
 			fcntl(fd, F_SETFD, i | FD_CLOEXEC);
 	}
+#else
+	fd = 0;
+#endif
 	srand((getpid() << 16) ^ getuid() ^ tv.tv_sec ^ tv.tv_usec);
 
 #ifdef DO_JRAND_MIX
@@ -68,7 +112,7 @@ void random_get_bytes(void *buf, size_t nbytes)
 	int fd = random_get_fd();
 	int lose_counter = 0;
 	unsigned char *cp = (unsigned char *) buf;
-
+#ifndef _WIN32
 	if (fd >= 0) {
 		while (n > 0) {
 			ssize_t x = read(fd, cp, n);
@@ -84,7 +128,7 @@ void random_get_bytes(void *buf, size_t nbytes)
 
 		close(fd);
 	}
-
+#endif
 	/*
 	 * We do this all the time, but this is the only source of
 	 * randomness if /dev/random/urandom is out to lunch.

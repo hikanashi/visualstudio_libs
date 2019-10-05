@@ -87,6 +87,15 @@
 #include <sys/syscall.h>
 #endif
 
+
+#ifdef _WIN32
+#include <io.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#define umask _umask
+#define ftruncate _chsize
+#endif
+
 #include "all-io.h"
 #include "uuidP.h"
 #include "uuidd.h"

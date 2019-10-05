@@ -21,7 +21,13 @@
 #endif
 
 #include <stdio.h>
+#ifndef _WIN32
 #include <unistd.h>
+#else
+#define HAVE_LOFF_T
+typedef unsigned int useconds_t;
+typedef int mode_t;
+#endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -188,19 +194,19 @@ errmsg(char doexit, int excode, char adderr, const char *fmt, ...)
 }
 
 #ifndef HAVE_ERR
-# define err(E, FMT...) errmsg(1, E, 1, FMT)
+# define err(E, FMT,...) errmsg(1, E, 1, FMT,__VA_ARGS__)
 #endif
 
 #ifndef HAVE_ERRX
-# define errx(E, FMT...) errmsg(1, E, 0, FMT)
+# define errx(E, FMT,...) errmsg(1, E, 0, FMT,__VA_ARGS__)
 #endif
 
 #ifndef HAVE_WARN
-# define warn(FMT...) errmsg(0, 0, 1, FMT)
+# define warn(FMT,...) errmsg(0, 0, 1, FMT,__VA_ARGS__)
 #endif
 
 #ifndef HAVE_WARNX
-# define warnx(FMT...) errmsg(0, 0, 0, FMT)
+# define warnx(FMT,...) errmsg(0, 0, 0, FMT,__VA_ARGS__)
 #endif
 #endif /* !HAVE_ERR_H */
 
@@ -278,7 +284,15 @@ static inline int usleep(useconds_t usec)
 		.tv_sec   =  usec / 1000000L,
 		.tv_nsec  = (usec % 1000000L) * 1000
 	};
+#ifndef _WIN32
 	return nanosleep(&waittime, NULL);
+#else
+	struct timeval tv;
+	tv.tv_sec = waittime.tv_sec;
+	tv.tv_usec = waittime.tv_nsec;
+	select(0, NULL, NULL, NULL, &tv);
+	return 0;
+#endif
 }
 #endif
 

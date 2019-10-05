@@ -37,7 +37,12 @@
 
 #include "uuid.h"
 
+#ifndef _WIN32
 #define LIBUUID_CLOCK_FILE	"/var/lib/libuuid/clock.txt"
+#else
+#define LIBUUID_CLOCK_FILE	"libuuid_clock.txt"
+#endif
+
 
 /*
  * Offset between 15-Oct-1582 and 1-Jan-70
