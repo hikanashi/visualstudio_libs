@@ -1,0 +1,54 @@
+
+Å°zib
+cmake -G "Visual Studio 15 2017 Win64" -T host=x64 -DCMAKE_INSTALL_PREFIX="C:\opt\local" ..
+cmake --build . --config Debug --target INSTALL
+cmake --build . --config Release --target INSTALL
+
+Å°jasson
+cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="C:\opt\local" ..
+cmake --build . --config Debug --target INSTALL
+cmake --build . --config Release --target INSTALL
+
+Å°openssl
+perl Configure debug-VC-WIN64A --prefix=C:\opt\local --openssldir=C:\opt\local\SSL -static no-asm no-shared
+nmake install
+
+Å°libevent
+cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Debug -DEVENT__LIBRARY_TYPE=STATIC -DEVENT_LIBRARY_TYPE=STATIC -DEVENT__DISABLE_SAMPLES=ON -DEVENT__DISABLE_TESTS=ON -DEVENT__DISABLE_BENCHMARK=ON -DEVENT__DISABLE_REGRESS=ON -DCMAKE_INSTALL_PREFIX="C:\opt\local" ..
+cmake --build . --config Debug --target INSTALL
+cmake --build . --config Release --target INSTALL
+#nmake /f makefile.nmake
+
+Å°nghttp2
+cmake -G "Visual Studio 15 2017 Win64"  -DCMAKE_INSTALL_PREFIX=C:\opt\local -DENABLE_STATIC_LIB=ON -DENABLE_SHARED_LIB=OFF -DENABLE_LIB_ONLY=ON ..
+cmake --build . --config Debug --target INSTALL
+
+
+Å°curl
+nmake /f Makefile.vc mode=static VC=15 GEN_PDB=yes MACHINE=x64 DEBUG=yes WITH_PREFIX=C:\opt\local  ENABLE_IPV6=yes MACHINE=x64 WITH_SSL=static SSL_PATH=C:\opt\local WITH_NGHTTP2=static NGHTTP2_PATH=C:\opt\local WITH_ZLIB=static ZLIB_PATH=C:\opt\local
+#nmake /f Makefile.vc mode=dll VC=15 GEN_PDB=yes MACHINE=x64 WITH_PREFIX=C:\opt\local  ENABLE_IPV6=yes MACHINE=x64 WITH_SSL=dll SSL_PATH=C:\opt\local WITH_NGHTTP2=static NGHTTP2_PATH=C:\opt\local WITH_ZLIB=static ZLIB_PATH=C:\opt\local
+#cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_INSTALL_PREFIX=C:\opt\local -DCMAKE_USE_OPENSSL=ON -DUSE_NGHTTP2=ON -DBUILD_SHARED_LIBS=OFF -DCURL_STATIC_CRT=ON -DBUILD_TESTING=OFF ..
+#cmake --build . --config Debug --target INSTALL
+#cmake --build . --config Release --target INSTALL
+
+Å°protobuf
+set _CL_=/utf-8
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Debug -Dprotobuf_BUILD_TESTS=OFF -Dprotobuf_BUILD_CONFORMANCE=OFF -Dprotobuf_BUILD_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX=C:\opt\local ..
+cmake --build . --config Debug --target INSTALL
+
+Å°cares
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS_DEBUG="/MTd" -DCARES_STATIC=ON -DCARES_SHARED=OFF -DCARES_STATIC_PIC=ON -DCARES_BUILD_TOOLS=OFF -DCMAKE_INSTALL_PREFIX=C:\opt\local ..
+cmake --build . --config Debug --target INSTALL
+
+Å°gflags
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Debug -DINSTALL_SHARED_LIBS=OFF -DBUILD_SHARED_LIBS=OFF -DINSTALL_STATIC_LIBS=ON -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=C:\opt\local ..
+cmake --build . --config Debug --target INSTALL
+
+Å°benchmark
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_BUILD_TYPE=Debug -DBENCHMARK_ENABLE_TESTING=OFF -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_INSTALL_PREFIX=C:\opt\local ..
+cmake --build . --config Debug --target INSTALL
+
+Å°grpc
+cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_EXE_LINKER_FLAGS="CRYPT32.LIB /MTd" -DCMAKE_BUILD_TYPE=Debug -DgRPC_MSVC_STATIC_RUNTIME=ON -DgRPC_ZLIB_PROVIDER=package -DgRPC_CARES_PROVIDER=package -DgRPC_SSL_PROVIDER=package -DgRPC_PROTOBUF_PROVIDER=package -DgRPC_GFLAGS_PROVIDER=package -DgRPC_BENCHMARK_PROVIDER=package -DgRPC_BUILD_CSHARP_EXT=OFF -DCMAKE_INSTALL_PREFIX=C:\opt\local ..
+cmake --build . --config Debug --target INSTALL
+
