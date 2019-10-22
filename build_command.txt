@@ -10,7 +10,8 @@ cmake --build . --config Debug --target INSTALL
 cmake --build . --config Release --target INSTALL
 
 Å°openssl
-perl Configure debug-VC-WIN64A --prefix=C:\opt\local --openssldir=C:\opt\local\SSL -static no-asm no-shared
+set CFLAGS=/D "OPENSSL_USE_NODELETE"
+perl Configure debug-VC-WIN64A --prefix=C:\opt\local --openssldir=/opt/local/SSL no-asm no-shared no-tests
 nmake install
 
 Å°libevent
@@ -25,7 +26,8 @@ cmake --build . --config Debug --target INSTALL
 
 
 Å°curl
-nmake /f Makefile.vc mode=static VC=15 GEN_PDB=yes MACHINE=x64 DEBUG=yes WITH_PREFIX=C:\opt\local  ENABLE_IPV6=yes MACHINE=x64 WITH_SSL=static SSL_PATH=C:\opt\local WITH_NGHTTP2=static NGHTTP2_PATH=C:\opt\local WITH_ZLIB=static ZLIB_PATH=C:\opt\local
+set CFLAGS=/D "OPENSSL_NO_AUTOLOAD_CONFIG"
+nmake /f Makefile.vc mode=static VC=15 GEN_PDB=yes MACHINE=x64 DEBUG=yes WITH_PREFIX=C:\opt\local  ENABLE_IPV6=yes MACHINE=x64 WITH_SSL=static SSL_PATH=C:\opt\local WITH_NGHTTP2=static NGHTTP2_PATH=C:\opt\local WITH_ZLIB=static ZLIB_PATH=C:\opt\local CFLAGS=/DOPENSSL_NO_AUTOLOAD_CONFIG
 #nmake /f Makefile.vc mode=dll VC=15 GEN_PDB=yes MACHINE=x64 WITH_PREFIX=C:\opt\local  ENABLE_IPV6=yes MACHINE=x64 WITH_SSL=dll SSL_PATH=C:\opt\local WITH_NGHTTP2=static NGHTTP2_PATH=C:\opt\local WITH_ZLIB=static ZLIB_PATH=C:\opt\local
 #cmake -G "Visual Studio 15 2017" -A x64 -DCMAKE_INSTALL_PREFIX=C:\opt\local -DCMAKE_USE_OPENSSL=ON -DUSE_NGHTTP2=ON -DBUILD_SHARED_LIBS=OFF -DCURL_STATIC_CRT=ON -DBUILD_TESTING=OFF ..
 #cmake --build . --config Debug --target INSTALL
